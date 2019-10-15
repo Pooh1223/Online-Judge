@@ -1,6 +1,9 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+string able[100];
+bool used[10];
+
 string add(string a,string b){
 	string ans = "";
 	reverse(a.begin(),a.end());
@@ -22,37 +25,6 @@ string add(string a,string b){
 		}
 	}
 	if(carry) ans += "1";
-	reverse(ans.begin(),ans.end());
-	return ans;
-}
-
-string subtract(string a,string b){
-	string ans = "";
-	reverse(a.begin(),a.end());
-	reverse(b.begin(),b.end());
-
-	if(a.length() < b.length()) swap(a,b);
-
-	for(int i = 0;i < a.length();++i){
-		int q = a[i] - '0',p = 0;
-		if(i < b.length()) p = b[i] - '0';
-
-		if(!q && !p) continue;
-		if(q < p){
-			int pos = i + 1;
-			while(pos < a.length()){
-				if(a[pos] - '0' > 0){
-					a[pos] = char(a[pos] - 1);
-					break;
-				} else {
-					a[pos++] = '9';
-				}
-			}
-			ans += to_string(q - p + 10);
-		} else {
-			ans += to_string(q - p);
-		}
-	}
 	reverse(ans.begin(),ans.end());
 	return ans;
 }
@@ -96,21 +68,62 @@ string multi(string a,string b){
 	return jizz;
 }
 
+bool legal(string s,bool type){
+	if(s.length() > 5) return 0;
 
-string divise(string a,string b){
-	string ans = "";
-	
-	return ans;
+	if(!type) memset(used,0,sizeof(used));
+
+	if(s.length() == 4){
+		if(used[0]) return 0;
+		else used[0] = 1;
+
+		for(int i = 0;i < s.length();++i){
+			if(used[s[i] - '0']) return 0;
+			else used[s[i] - '0'] = 1;
+		}
+	} else {
+		for(int i = 0;i < s.length();++i){
+			if(used[s[i] - '0']) return 0;
+			else used[s[i] - '0'] = 1;
+		}
+	}
+	return 1;
 }
 
 int main(){
-	string a,b;
-	cin >> a >> b;
+	ios_base::sync_with_stdio(false);
+	cin.tie(0);
 
-	cout << add(a,b) << "\n";
-	cout << subtract(a,b) << "\n";
-	cout << multi(a,b) << "\n";
-	cout << divise(a,b) << "\n";
-	
+	for(int i = 2;i <= 79;++i){
+		string s = "1234";
+		legal(s,0);
+		string ss = "";
+
+		bool ok = 0;
+
+		while(ss.length() <= 5){
+			ss = multi(s,to_string(i));
+			if(!legal(ss,1)){
+				while(!legal(s = add(s,"1"),0));
+				continue;
+			}
+			else {
+				if(s.length() != 4) able[i] += ss + " / " + s + " = " + to_string(i) + "\n";
+				else able[i] += ss + " / 0" + s + " = " + to_string(i) + "\n";
+				ok = 1;
+			} 
+			while(!legal(s = add(s,"1"),0));
+			
+		}
+		if(!ok) able[i] += "There are no solutions for " + to_string(i) + ".\n";
+	}
+
+	int n;
+	int cnt = 0;
+	while(cin >> n && n){
+		if(cnt) cout << "\n";
+		cout << able[n];
+		cnt++;
+	}
 	return 0;
 }
