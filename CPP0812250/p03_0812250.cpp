@@ -3,9 +3,9 @@
 //Email Address: leo891223@gmail.com
 //Assignment Number: 03
 //Description: A program allows you to see how many month you need to finish your debt.
-//Last Changed: 10/13, 2019
+//Last Changed: 10/16, 2019
 //(i) difficulty encountered?
-//None.
+//Decimal processing is hard
 //(ii) anything special?
 //I provide one additional functions: (1) inputCheck to check if the input is legal
 //(2) I allows user to input their new monthly payment if they need to
@@ -64,7 +64,7 @@ int main(){
 		if(check) interestRate /= 1200.0;
 		else interestRate /= 100.0;
 
-		cout << "Finally,enter how much you can afford per month (an integer no larger than 50000): ";
+		cout << "\nFinally,enter how much you can afford per month (an integer no larger than 50000): ";
 
 		//check if it is legal input
 		monthlyPaid = inputCheck(1,50000);
@@ -89,8 +89,7 @@ int main(){
 		while(p > 0){
 			cnt++;
 
-			int interestPaid = (int)(((double)p * interestRate) * 10 + 0.5) / 10.0;
-			sum += interestPaid;
+			int interestPaid = (int)(((double)p * interestRate) + 0.5);
 			p -= monthlyPaid - interestPaid;
 		}
 
@@ -103,7 +102,7 @@ int main(){
 		cin >> chg;
 
 		if(chg){
-			cout << "You choose to change\n";
+			cout << "You choose to change\n\n";
 			cout << "Now please input after which month you want to change your payment\n";
 			cout << "(an integer no larger than original total month) : ";
 
@@ -111,7 +110,7 @@ int main(){
 			
 			cout << "Your input is " << specifyMonth << "\n";
 
-			cout << "now please input your new monthly payment (an integer no larger than 50000): ";
+			cout << "\nnow please input your new monthly payment (an integer no larger than 50000): ";
 			cout << "Your original payment is " << monthlyPaid << "\n";
 			newMonthlyPaid = inputCheck(1,50000);
 
@@ -125,14 +124,17 @@ int main(){
 		for(int i = 1;price > 0;++i){
 			if(i == specifyMonth) monthlyPaid = newMonthlyPaid;
 
-			int interestPaid = (int)(((double)price * interestRate) * 10 + 0.5) / 10.0;
+			int interestPaid = (int)((double)price * interestRate + 0.5);
 			sum += interestPaid;
 			price -= monthlyPaid - interestPaid;
 
 			cout << i << " Month : \n";
 			cout << "interest paid this month : " << interestPaid << "\n";
 
-			if(price < 0) cout << "remaining debt : 0\n\n";
+			if(price < 0){
+				cout << "remaining debt : 0\n\n";
+				cout << "Total month : " << i << " months\n";
+			} 
 			else cout << "remaining debt : " << price << "\n\n";
 		}
 
