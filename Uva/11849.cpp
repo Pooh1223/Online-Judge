@@ -19,7 +19,7 @@ bool search(int u){
 }
 
 int main(){
-
+	
 	while(cin >> n >> m){
 		if(!n && !m) break;
 
